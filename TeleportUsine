@@ -1,0 +1,233 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Fougerite;
+using UnityEngine;
+using System.IO;
+using Facepunch.MeshBatch;
+using System.Timers;
+namespace TeleportUsine
+{
+    public class Loader : Module
+    {
+        public override string Name => "TeleportUsine";
+        public override string Author => "Minx";
+        public override string Description => "No Description";
+        public override Version Version => new Version("1.0");
+        public static int timeInterval = 120;
+        public string cooldownMessage = "You must wait[color red]{0} [color white] seconds to teleport again.";
+        public string Prefix = "TeleportUsine";
+        List<Fougerite.Player> inTP = new List<Player>();
+        private static DateTime epoch;
+        public static double CurrentTime()
+        {
+            return System.DateTime.UtcNow.Subtract(epoch).TotalSeconds;
+        }
+        public static Dictionary<Fougerite.Player, double> nextTP = new Dictionary<Fougerite.Player, double>();
+        public override void Initialize()
+        {
+            epoch = new System.DateTime(1970, 1, 1);
+            Hooks.OnCommand += Teleport;
+            Hooks.OnPlayerDisconnected += Disconnect;
+        }
+        public override void DeInitialize()
+        {
+            Hooks.OnPlayerDisconnected -= Disconnect;
+        }
+        private void Disconnect(Fougerite.Player player)
+        {
+            
+        }
+        public static double TimeSeconds()
+        {
+            return System.DateTime.UtcNow.Subtract(epoch).TotalSeconds;
+        }
+        public static DateTime DataAtual()
+        {
+            return DateTime.Now;
+        }
+        System.Timers.Timer timer = new Timer();
+        void MessagesTeleport(Fougerite.Player player)
+        {
+            player.MessageFrom("TeleportUsine", "===== [color red]Teleports [color clear]========");
+            player.MessageFrom("TeleportUsine", "Usage [color red]/ir small");
+            player.MessageFrom("TeleportUsine", "Usage [color red]/ir vale");
+            player.MessageFrom("TeleportUsine", "Usage [color red]/ir factory");
+            player.MessageFrom("TeleportUsine", "Usage [color red]/ir big");
+            player.MessageFrom("TeleportUsine", "Usage [color red]/ir florest");
+            player.MessageFrom("TeleportUsine", "Usage [color red]/ir zombie");
+            player.MessageFrom("TeleportUsine", "======================");
+            return;
+        }
+        void Teleport(Fougerite.Player player, string cmd, string[] args)
+        {
+            if (cmd == "ir")
+            {
+                if (args.Length == 0)
+                {
+                    MessagesTeleport(player);
+                    return;
+                }             
+                    if (nextTP.ContainsKey(player))
+                    {
+                        if (nextTP[player] > CurrentTime())
+                        {
+                            player.MessageFrom(Prefix, string.Format(cooldownMessage, Math.Ceiling((nextTP[player] - CurrentTime())).ToString()));
+                            return;
+                        }
+                        nextTP.Remove(player);
+                    }
+                    if(inTP.Contains(player))
+                {
+                    player.Notice("x", "Are you already waiting to teleport");
+                    return;
+                }
+                switch (args[0].ToLower())
+                {
+                    case "small":
+                        {
+                            System.Timers.Timer timer = new System.Timers.Timer();
+                            inTP.Add(player);
+                            timer.Interval = 8 * 1000;
+                            timer.Enabled = true;
+                            timer.AutoReset = false;
+                            player.Notice("✌", "Teleporting in 8 seconds to small ✌");
+                            timer.Elapsed += (x, y) =>
+                            {
+                                if (player == null) { return; }
+                                if (!player.IsOnline) { return; }
+                                if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
+                                player.TeleportTo(6077f, 382.5f, -3670.2f);
+                                player.Notice("✌", "You teleported to small ✌");
+                                timer.Dispose();
+                                if (nextTP.ContainsKey(player)) nextTP.Remove(player);
+                                nextTP.Add(player, CurrentTime() + timeInterval);
+                                inTP.Remove(player);
+                                return;
+                            };
+                        }
+                        break;
+                    case "vale":
+                        {
+                            inTP.Add(player);
+                            System.Timers.Timer timer = new System.Timers.Timer();
+                            timer.Interval = 8 * 1000;
+                            timer.Enabled = true;
+                            timer.AutoReset = false;
+                            player.Notice("✌", "Teleporting in 8 seconds to the vale ✌");
+                            timer.Elapsed += (x, y) =>
+                            {
+                                if (player == null) { return; }
+                                if (!player.IsOnline) { return; }
+                                if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
+                                player.TeleportTo(4855.6f, 420.9f, -3769.1f);
+                                player.Notice("✌", "You teleported to vale ✌");
+                                timer.Dispose();
+                                if (nextTP.ContainsKey(player)) nextTP.Remove(player);
+                                nextTP.Add(player, CurrentTime() + timeInterval);
+                                inTP.Remove(player);
+                                return;
+                            };
+                        }
+                        break;
+                    case "factory":
+                        {
+                            inTP.Add(player);
+                            System.Timers.Timer timer = new System.Timers.Timer();
+                            timer.Interval = 8 * 1000;
+                            timer.Enabled = true;
+                            timer.AutoReset = false;
+                            player.Notice("✌", "Teleporting in 8 seconds to the factory ✌");
+                            timer.Elapsed += (x, y) =>
+                            {
+                                if (player == null) { return; }
+                                if (!player.IsOnline) { return; }
+                                if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
+                                player.TeleportTo(6369.2f, 362.5f, -4410.8f);
+                                player.Notice("✌", "You teleported to the factory.  ✌");
+                                timer.Dispose();
+                                if (nextTP.ContainsKey(player)) nextTP.Remove(player);
+                                nextTP.Add(player, CurrentTime() + timeInterval);
+                                inTP.Remove(player);
+                                return;
+                            };
+                        }
+                        break;
+                    case "big":
+                        {
+                            inTP.Add(player);
+                            System.Timers.Timer timer = new System.Timers.Timer();
+                            timer.Interval = 8 * 1000;
+                            timer.Enabled = true;
+                            timer.AutoReset = false;
+                            player.Notice("✌", "Teleporting in 8 seconds to the big ✌");
+                            timer.Elapsed += (x, y) =>
+                            {
+                                if (player == null) { return; }
+                                if (!player.IsOnline) { return; }
+                                if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
+                                player.TeleportTo(5317f, 369f, -4727f);
+                                player.Notice("®", "You teleported to the big ✌");
+                                timer.Dispose();
+                                if (nextTP.ContainsKey(player)) nextTP.Remove(player);
+                                nextTP.Add(player, CurrentTime() + timeInterval);
+                                inTP.Remove(player);
+                                return; ;
+                            };
+                        }
+                        break;
+                    case "florest":
+                        {
+                            inTP.Add(player);
+                            System.Timers.Timer timer = new System.Timers.Timer();
+                            timer.Interval = 8 * 1000;
+                            timer.Enabled = true;
+                            timer.AutoReset = false;
+                            player.Notice("✌", "Teleporting in 8 seconds to the florest ✌");
+                            timer.Elapsed += (x, y) =>
+                            {
+                                if (player == null) { return; }
+                                if (!player.IsOnline) { return; }
+                                if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
+                                player.TeleportTo(6643f, 354f, -3858f);
+                                player.Notice("✌", "You teleported to the florest  ✌");
+                                timer.Dispose();
+                                if (nextTP.ContainsKey(player)) nextTP.Remove(player);
+                                nextTP.Add(player, CurrentTime() + timeInterval);
+                                inTP.Remove(player);
+                                return;
+                            };
+                        }
+                        break;
+                    case "zombie":
+                        {
+                            inTP.Add(player);
+                            System.Timers.Timer timer = new System.Timers.Timer();
+                            timer.Interval = 8 * 1000;
+                            timer.Enabled = true;
+                            timer.AutoReset = false;
+                            player.Notice("✌", "Teleporting in 8 seconds to Zombie Hill ✌");
+                            timer.Elapsed += (x, y) =>
+                            {
+                                if (player == null) { return; }
+                                if (!player.IsOnline) { return; }
+                                if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
+                                player.TeleportTo(6393f, 395f, -3428f);
+                                player.Notice("®", "You teleported to the Zombie Hill  ✌");
+                                timer.Dispose();
+                                if (nextTP.ContainsKey(player)) nextTP.Remove(player);
+                                nextTP.Add(player, CurrentTime() + timeInterval);
+                                inTP.Remove(player);
+                                return;
+                            };
+                            Fougerite.SerializableDictionary<string, double> cacheTimeCheck = new Fougerite.SerializableDictionary<string, double>();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+}
