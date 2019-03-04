@@ -7,6 +7,7 @@ using UnityEngine;
 using System.IO;
 using Facepunch.MeshBatch;
 using System.Timers;
+
 namespace TeleportUsine
 {
     public class Loader : Module
@@ -26,15 +27,18 @@ namespace TeleportUsine
         }
         public static Dictionary<Fougerite.Player, double> nextTP = new Dictionary<Fougerite.Player, double>();
         public override void Initialize()
+
         {
             epoch = new System.DateTime(1970, 1, 1);
             Hooks.OnCommand += Teleport;
             Hooks.OnPlayerDisconnected += Disconnect;
+
         }
         public override void DeInitialize()
         {
             Hooks.OnPlayerDisconnected -= Disconnect;
         }
+
         private void Disconnect(Fougerite.Player player)
         {
             
@@ -43,11 +47,13 @@ namespace TeleportUsine
         {
             return System.DateTime.UtcNow.Subtract(epoch).TotalSeconds;
         }
+
         public static DateTime DataAtual()
         {
             return DateTime.Now;
         }
         System.Timers.Timer timer = new Timer();
+
         void MessagesTeleport(Fougerite.Player player)
         {
             player.MessageFrom("TeleportUsine", "===== [color red]Teleports [color clear]========");
@@ -60,7 +66,9 @@ namespace TeleportUsine
             player.MessageFrom("TeleportUsine", "======================");
             return;
         }
+
         void Teleport(Fougerite.Player player, string cmd, string[] args)
+
         {
             if (cmd == "ir")
             {
@@ -107,8 +115,10 @@ namespace TeleportUsine
                                 return;
                             };
                         }
+
                         break;
                     case "vale":
+
                         {
                             inTP.Add(player);
                             System.Timers.Timer timer = new System.Timers.Timer();
@@ -130,8 +140,11 @@ namespace TeleportUsine
                                 return;
                             };
                         }
+
+
                         break;
                     case "factory":
+
                         {
                             inTP.Add(player);
                             System.Timers.Timer timer = new System.Timers.Timer();
@@ -145,6 +158,7 @@ namespace TeleportUsine
                                 if (!player.IsOnline) { return; }
                                 if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
                                 player.TeleportTo(6369.2f, 362.5f, -4410.8f);
+
                                 player.Notice("✌", "You teleported to the factory.  ✌");
                                 timer.Dispose();
                                 if (nextTP.ContainsKey(player)) nextTP.Remove(player);
@@ -155,6 +169,7 @@ namespace TeleportUsine
                         }
                         break;
                     case "big":
+
                         {
                             inTP.Add(player);
                             System.Timers.Timer timer = new System.Timers.Timer();
@@ -168,6 +183,7 @@ namespace TeleportUsine
                                 if (!player.IsOnline) { return; }
                                 if (DataStore.GetInstance().ContainsKey("HGIG", player.SteamID)) { return; }
                                 player.TeleportTo(5317f, 369f, -4727f);
+
                                 player.Notice("®", "You teleported to the big ✌");
                                 timer.Dispose();
                                 if (nextTP.ContainsKey(player)) nextTP.Remove(player);
@@ -178,6 +194,7 @@ namespace TeleportUsine
                         }
                         break;
                     case "florest":
+
                         {
                             inTP.Add(player);
                             System.Timers.Timer timer = new System.Timers.Timer();
@@ -201,6 +218,7 @@ namespace TeleportUsine
                         }
                         break;
                     case "zombie":
+
                         {
                             inTP.Add(player);
                             System.Timers.Timer timer = new System.Timers.Timer();
@@ -223,9 +241,12 @@ namespace TeleportUsine
                             };
                             Fougerite.SerializableDictionary<string, double> cacheTimeCheck = new Fougerite.SerializableDictionary<string, double>();
                         }
+
+
                         break;
                     default:
                         break;
+
                 }
             }
         }
