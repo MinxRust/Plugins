@@ -10,7 +10,7 @@ using System.Timers;
 
 namespace TeleportUsine
 {
-    public class Loader : Module
+    public class TeleportUsine : Module
     {
         public override string Name => "TeleportUsine";
         public override string Author => "Minx";
