@@ -7,9 +7,9 @@ using UnityEngine;
 using System.IO;
 using System.Timers;
 
-namespace TeleportUsing
+namespace TeleportMap
 {
-    public class TeleportUsing : Module
+    public class TeleportMap : Module
     {
         public static Dictionary<ulong, double> Cooldown;
         public static Config config = new Config();
@@ -32,13 +32,13 @@ namespace TeleportUsing
             {
                 if(args.Length != 1)
                 {
-                    player.MessageFrom("TeleportUsing", "TeleportUsing by minx & ice cold");
-                    player.MessageFrom("TeleportUsing", "Syntax: /warp warpname  - Warps you within the x delay");
-                    player.MessageFrom("TeleportUsing", "Syntax: /warps - See all avaible warps");
+                    player.MessageFrom("TeleportMap", "TeleportMap by minx & ice cold");
+                    player.MessageFrom("TeleportMap", "Syntax: /warp warpname  - Warps you within the x delay");
+                    player.MessageFrom("TeleportMap", "Syntax: /warps - See all avaible warps");
                     if(player.Admin)
                     {
-                        player.MessageFrom("TeleportUsing", "Admin Syntax: /warpremove warpname - Removes a warp");
-                        player.MessageFrom("TeleportUsing", "Admin Syntax: /warpadd warpname delay adminonly[true/false] - Add a new warp");
+                        player.MessageFrom("TeleportMap", "Admin Syntax: /warpremove warpname - Removes a warp");
+                        player.MessageFrom("TeleportMap", "Admin Syntax: /warpadd warpname delay adminonly[true/false] - Add a new warp");
 
                     }
                 }
@@ -52,13 +52,13 @@ namespace TeleportUsing
                             double calc = TimeSpan.FromTicks(DateTime.Now.Ticks).TotalSeconds - Cooldown[player.UID];
                             if(calc <= config.Cooldown)
                             {
-                                player.MessageFrom("TeleportUsing", string.Format(config.CooldownMessage, calc, config.Cooldown));
+                                player.MessageFrom("TeleportMap", string.Format(config.CooldownMessage, calc, config.Cooldown));
                                 return;
                             }
                         }
                         if (Cooldown.ContainsKey(player.UID)) Cooldown.Remove(player.UID);
-                        if (config.WarpsList[name].AdminOnly && !player.Admin) { player.MessageFrom("TeleportUsing", string.Format(config.NotAllowed, name)); return; }
-                        player.MessageFrom("TeleportUsing", string.Format(config.WarpMessage, name, config.WarpsList[name].delay));
+                        if (config.WarpsList[name].AdminOnly && !player.Admin) { player.MessageFrom("TeleportMap", string.Format(config.NotAllowed, name)); return; }
+                        player.MessageFrom("TeleportMap", string.Format(config.WarpMessage, name, config.WarpsList[name].delay));
                         Timer timer = new Timer();
                         timer.Interval = config.WarpsList[name].delay * 1000;
                         timer.AutoReset = false;
@@ -74,7 +74,7 @@ namespace TeleportUsing
                     }
                     else
                     {
-                        player.MessageFrom("TeleportUsing", string.Format(config.UnknownWarp, name));
+                        player.MessageFrom("TeleportMap", string.Format(config.UnknownWarp, name));
                     }
                 }
             }
@@ -83,7 +83,7 @@ namespace TeleportUsing
                 foreach(KeyValuePair<string, ProperWarps> pair in config.WarpsList)
                 {
                     string warpname = pair.Key;
-                    player.MessageFrom("TeleportUsing", string.Format(config.WarpListMessage, warpname, pair.Value.delay.ToString()));
+                    player.MessageFrom("TeleportMap", string.Format(config.WarpListMessage, warpname, pair.Value.delay.ToString()));
                 }
             }
             if(cmd == "warpadd")
@@ -99,17 +99,17 @@ namespace TeleportUsing
                         if (!config.WarpsList.ContainsKey(name))
                         {
                             config.WarpsList.Add(name, new ProperWarps(delay, admin, player.Location.ToString()));
-                            player.MessageFrom("TeleportUsing", string.Format("Warp {0} | AdminOnly = {1} | Delay = {2}, Succesfully added", name, admin, delay));
+                            player.MessageFrom("TeleportMap", string.Format("Warp {0} | AdminOnly = {1} | Delay = {2}, Succesfully added", name, admin, delay));
                             JsonHelper.SaveFile(config, GetAbsoluteFilePath("cfg_Warps.json"));
                         }
                         else
                         {
-                            player.MessageFrom("TeleportUsing", string.Format("Warp {0} doesn't exists", name));
+                            player.MessageFrom("TeleportMap", string.Format("Warp {0} doesn't exists", name));
                         }
                     }  
                     else
                     {
-                        player.MessageFrom("TeleportUsing", "Admin Syntax: /warpadd warpname delay adminonly[true/false] - Add a new warp");
+                        player.MessageFrom("TeleportMap", "Admin Syntax: /warpadd warpname delay adminonly[true/false] - Add a new warp");
                     }
                 }
             }
@@ -122,18 +122,18 @@ namespace TeleportUsing
                         string name = args[0];
                         if (config.WarpsList.ContainsKey(name))
                         {
-                            player.MessageFrom("TeleportUsing", string.Format("Remove warp {0}", name));
+                            player.MessageFrom("TeleportMap", string.Format("Remove warp {0}", name));
                             config.WarpsList.Remove(name);
                             JsonHelper.SaveFile(config, GetAbsoluteFilePath("cfg_Warps.json"));
                         }
                         else
                         {
-                            player.MessageFrom("TeleportUsing", string.Format(config.UnknownWarp, name));
+                            player.MessageFrom("TeleportMap", string.Format(config.UnknownWarp, name));
                         }
                     }
                     else
                     {
-                        player.MessageFrom("TeleportUsing", "Admin Syntax: /warpremove warpname - Removes a warp");
+                        player.MessageFrom("TeleportMap", "Admin Syntax: /warpremove warpname - Removes a warp");
                     }
                 }
             }
@@ -165,7 +165,7 @@ namespace TeleportUsing
         }
         public override string Name
         {
-            get { return "TeleportUsing"; }
+            get { return "TeleportMap"; }
         }
         public override string Author
         {
